@@ -5,7 +5,7 @@
 
 The following code is addopted from qutip.
 
-J.R. Johansson, P.D. Nation, Franco Nori,
+[1] J.R. Johansson, P.D. Nation, Franco Nori,
 QuTiP: An open-source Python framework for the dynamics of open quantum systems,
 Computer Physics Communications,
 Volume 183, Issue 8,
@@ -13,19 +13,23 @@ Volume 183, Issue 8,
 Pages 1760-1772,
 ISSN 0010-4655,
 https://doi.org/10.1016/j.cpc.2012.02.021.
+
+
+[2] Lambert, Neill, et al. "QuTiP 5: The Quantum Toolbox in Python." 
+arXiv preprint arXiv:2412.04705 (2024).
 """
 
 import itertools as it
 import numpy as np
-from numpy import array,log2
+from numpy import pi, array, sin, cos, angle, log2, sqrt
 
 from packaging.version import parse as parse_version
 
-from qutip.qobj import Qobj
-from qutip.superoperator import vector_to_operator
-from qutip.superop_reps import _super_to_superpauli, _isqubitdims
+from qutip import Qobj, isket, ket2dm, tensor, vector_to_operator, settings
 
-from qutip import settings
+from qutip.core.superop_reps import _to_superpauli, isqubitdims
+import qutip.visualization
+
 
 try:
     import matplotlib.pyplot as plt
@@ -143,12 +147,12 @@ def hinton(rho, xlabels=None, ylabels=None, title=None, ax=None, cmap=None,
         elif rho.isoperbra:
             W = vector_to_operator(rho.dag()).full()
         elif rho.issuper:
-            if not _isqubitdims(rho.dims):
+            if not isqubitdims(rho.dims):
                 raise ValueError("Hinton plots of superoperators are "
                                  "currently only supported for qubits.")
             # Convert to a superoperator in the Pauli basis,
             # so that all the elements are real.
-            sqobj = _super_to_superpauli(rho)
+            sqobj = _to_superpauli(rho)
             nq = int(log2(sqobj.shape[0]) / 2)
             W = sqobj.full().T
             # Create default labels, too.

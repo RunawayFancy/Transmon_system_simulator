@@ -80,7 +80,7 @@ def plot_pulse_sequence(pseq: list[PulseConfig], sim_opts: SimulationOption):
     ax2.set_ylim(-vertical_spacing/2, len(channel_dic) * vertical_spacing)
     ax2.set_ylabel("Pulse Amplitude (a.u.)")
     plt.grid()
-    fig.show()
+    plt.show()
 
 def plot_population_evolution(_system, result_list, sim_opts: SimulationOption, interested_state, interested_state_label, initial_state_label):
     num_subplots = len(result_list)
@@ -111,17 +111,20 @@ def plot_population_evolution(_system, result_list, sim_opts: SimulationOption, 
     # Adjust layout
     plt.tight_layout()
     # Show the plot
-    fig.show()
+    plt.show()
     
 
-def plot_zz_sweep(x_list:list, y_list:list, zz_list:list, x_label:str, y_label:str, fn:str):
+def plot_zz_sweep(x_list:list, y_list:list, zz_list:list, x_label:str, y_label:str, fn:str=None):
     nrm1 = matplotlib.colors.LogNorm()  
     fig1, ax1 = plt.subplots()
     p1 = ax1.pcolor(x_list, y_list, zz_list, cmap=matplotlib.cm.viridis_r,norm=nrm1)
     cb1 = fig1.colorbar(p1, ax=ax1,label='ZZ', extend='both')
     ax1.set_xlabel('${}$'.format(x_label))
     ax1.set_ylabel('${}$'.format(y_label))
-    plt.title(fn)
+    if fn:
+        plt.title(fn)
+    else:
+        plt.title('ZZ')
     plt.show()
 
 
